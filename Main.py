@@ -110,51 +110,53 @@ def twoPlayerMode():
         handleEvents()
         configureBackground()
         crossStyle()
+        displayCurrentPlayer(checkWin())
 
-        if not onStartScreen:
+        if not onStartScreen and not checkWin():
             if block0.wasClicked(getCursorPos(), isLeftMouseClicked()) or blockFlags[0] != "":
                 if blockFlags[0] == "":
-                    blockFlags[0] = getMove()
+                    blockFlags[0] = getMove(True)
                 block0.putMove(blockFlags[0], buttonRed)
 
             if block1.wasClicked(getCursorPos(), isLeftMouseClicked()) or blockFlags[1] != "":
                 if blockFlags[1] == "":
-                    blockFlags[1] = getMove()
+                    blockFlags[1] = getMove(True)
                 block1.putMove(blockFlags[1], buttonRed)
 
             if block2.wasClicked(getCursorPos(), isLeftMouseClicked()) or blockFlags[2] != "":
                 if blockFlags[2] == "":
-                    blockFlags[2] = getMove()
+                    blockFlags[2] =\
+                        getMove(True)
                 block2.putMove(blockFlags[2], buttonRed)
 
             if block3.wasClicked(getCursorPos(), isLeftMouseClicked()) or blockFlags[3] != "":
                 if blockFlags[3] == "":
-                    blockFlags[3] = getMove()
+                    blockFlags[3] = getMove(True)
                 block3.putMove(blockFlags[3], buttonRed)
 
             if block4.wasClicked(getCursorPos(), isLeftMouseClicked()) or blockFlags[4] != "":
                 if blockFlags[4] == "":
-                    blockFlags[4] = getMove()
+                    blockFlags[4] = getMove(True)
                 block4.putMove(blockFlags[4], buttonRed)
 
             if block5.wasClicked(getCursorPos(), isLeftMouseClicked()) or blockFlags[5] != "":
                 if blockFlags[5] == "":
-                    blockFlags[5] = getMove()
+                    blockFlags[5] = getMove(True)
                 block5.putMove(blockFlags[5], buttonRed)
 
             if block6.wasClicked(getCursorPos(), isLeftMouseClicked()) or blockFlags[6] != "":
                 if blockFlags[6] == "":
-                    blockFlags[6] = getMove()
+                    blockFlags[6] = getMove(True)
                 block6.putMove(blockFlags[6], buttonRed)
 
             if block7.wasClicked(getCursorPos(), isLeftMouseClicked()) or blockFlags[7] != "":
                 if blockFlags[7] == "":
-                    blockFlags[7] = getMove()
+                    blockFlags[7] = getMove(True)
                 block7.putMove(blockFlags[7], buttonRed)
 
             if block8.wasClicked(getCursorPos(), isLeftMouseClicked()) or blockFlags[8] != "":
                 if blockFlags[8] == "":
-                    blockFlags[8] = getMove()
+                    blockFlags[8] = getMove(True)
                 block8.putMove(blockFlags[8], buttonRed)
 
             if moveFlag:
@@ -163,7 +165,8 @@ def twoPlayerMode():
 
             pygame.display.update()
         else:
-            onStartScreen = False
+            if not isLeftMouseClicked():
+                onStartScreen = False
 
 
 def crossStyle():
@@ -195,9 +198,16 @@ def put_message_center(message, color, font, yOffset):
                                    yOffset])
 
 
-def getMove():
+def displayCurrentPlayer(win):
+    if not win:
+        put_message_center("Current Player: " + getMove(False), black, titleFont, 200)
+    else:
+        put_message_center("Player " + moves[0 if currentPlayer == 1 else 1] + " wins!", black, titleFont, 200)
+
+
+def getMove(flag):
     global moveFlag
-    moveFlag = True
+    moveFlag = flag
 
     return moves[currentPlayer]
 
@@ -205,10 +215,7 @@ def getMove():
 def playerFlag():
     global currentPlayer
 
-    if currentPlayer == 0:
-        currentPlayer = 1
-    else:
-        currentPlayer = 0
+    currentPlayer = 0 if currentPlayer == 1 else 1
 
 
 def getCursorPos():
@@ -226,6 +233,25 @@ def handleEvents():
             quitProgram()
 
 
+def checkWin():
+    winPositions = [[0, 1, 2],
+                    [3, 4, 5],
+                    [6, 7, 8],
+                    [0, 3, 6],
+                    [1, 4, 7],
+                    [2, 5, 8],
+                    [0, 4, 8],
+                    [2, 4, 6]]
+
+    for i in range(winPositions.__len__()):
+        pos = [blockFlags[winPositions[i][0]], blockFlags[winPositions[i][1]], blockFlags[winPositions[i][2]]]
+        if pos[0] != "" and pos[1] != "" and pos[2] != "" and pos[0] == pos[1] and pos[1] == pos[2]:
+            playerFlag()
+            return True
+
+    return False
+
+
 def quitProgram():
     """
     This function quits the program.
@@ -233,6 +259,7 @@ def quitProgram():
     """
     pygame.quit()
     exit()
+
 
 while True:
     startScreen()
