@@ -31,6 +31,7 @@ halfBoxSize = boxSize / 2
 
 gameDisplay = pygame.display.set_mode((displayWidth, displayHeight))
 pygame.display.set_caption("Tic Tac Toe")
+pygame.display.set_icon(pygame.image.load('icon.png'))
 
 singlePlayer = Button.button(buttonBlue, hoverButtonBlue, gameDisplay, "SINGLE PLAYER",
                              centerDisplayWidth - (buttonWidth / 2),
