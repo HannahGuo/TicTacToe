@@ -71,6 +71,7 @@ moves = ["X", "O"]
 moveFlag = False
 currentPlayer = 0
 onStartScreen = True
+acceptClicks = True
 
 
 def startScreen():
@@ -113,58 +114,60 @@ def twoPlayerMode():
         crossStyle()
         displayCurrentPlayer(checkWin())
 
-        if not onStartScreen and not checkWin():
-            if block0.wasClicked(getCursorPos(), isLeftMouseClicked()) or blockFlags[0] != "":
-                if blockFlags[0] == "":
-                    blockFlags[0] = getMove(True)
-                block0.putMove(blockFlags[0], buttonRed)
+        if not onStartScreen:
+            if acceptClicks:
+                if block0.wasClicked(getCursorPos(), isLeftMouseClicked()):
+                    if blockFlags[0] == "":
+                        blockFlags[0] = getMove(True)
 
-            if block1.wasClicked(getCursorPos(), isLeftMouseClicked()) or blockFlags[1] != "":
-                if blockFlags[1] == "":
-                    blockFlags[1] = getMove(True)
-                block1.putMove(blockFlags[1], buttonRed)
+                if block1.wasClicked(getCursorPos(), isLeftMouseClicked()):
+                    if blockFlags[1] == "":
+                        blockFlags[1] = getMove(True)
 
-            if block2.wasClicked(getCursorPos(), isLeftMouseClicked()) or blockFlags[2] != "":
-                if blockFlags[2] == "":
-                    blockFlags[2] =\
-                        getMove(True)
-                block2.putMove(blockFlags[2], buttonRed)
+                if block2.wasClicked(getCursorPos(), isLeftMouseClicked()):
+                    if blockFlags[2] == "":
+                        blockFlags[2] = getMove(True)
 
-            if block3.wasClicked(getCursorPos(), isLeftMouseClicked()) or blockFlags[3] != "":
-                if blockFlags[3] == "":
-                    blockFlags[3] = getMove(True)
-                block3.putMove(blockFlags[3], buttonRed)
+                if block3.wasClicked(getCursorPos(), isLeftMouseClicked()):
+                    if blockFlags[3] == "":
+                        blockFlags[3] = getMove(True)
 
-            if block4.wasClicked(getCursorPos(), isLeftMouseClicked()) or blockFlags[4] != "":
-                if blockFlags[4] == "":
-                    blockFlags[4] = getMove(True)
-                block4.putMove(blockFlags[4], buttonRed)
+                if block4.wasClicked(getCursorPos(), isLeftMouseClicked()):
+                    if blockFlags[4] == "":
+                        blockFlags[4] = getMove(True)
 
-            if block5.wasClicked(getCursorPos(), isLeftMouseClicked()) or blockFlags[5] != "":
-                if blockFlags[5] == "":
-                    blockFlags[5] = getMove(True)
-                block5.putMove(blockFlags[5], buttonRed)
+                if block5.wasClicked(getCursorPos(), isLeftMouseClicked()):
+                    if blockFlags[5] == "":
+                        blockFlags[5] = getMove(True)
 
-            if block6.wasClicked(getCursorPos(), isLeftMouseClicked()) or blockFlags[6] != "":
-                if blockFlags[6] == "":
-                    blockFlags[6] = getMove(True)
-                block6.putMove(blockFlags[6], buttonRed)
+                if block6.wasClicked(getCursorPos(), isLeftMouseClicked()):
+                    if blockFlags[6] == "":
+                        blockFlags[6] = getMove(True)
 
-            if block7.wasClicked(getCursorPos(), isLeftMouseClicked()) or blockFlags[7] != "":
-                if blockFlags[7] == "":
-                    blockFlags[7] = getMove(True)
-                block7.putMove(blockFlags[7], buttonRed)
+                if block7.wasClicked(getCursorPos(), isLeftMouseClicked()):
+                    if blockFlags[7] == "":
+                        blockFlags[7] = getMove(True)
 
-            if block8.wasClicked(getCursorPos(), isLeftMouseClicked()) or blockFlags[8] != "":
-                if blockFlags[8] == "":
-                    blockFlags[8] = getMove(True)
-                block8.putMove(blockFlags[8], buttonRed)
+                if block8.wasClicked(getCursorPos(), isLeftMouseClicked()):
+                    if blockFlags[8] == "":
+                        blockFlags[8] = getMove(True)
 
             if moveFlag:
                 moveFlag = False
                 playerFlag()
 
+            block0.putMove(blockFlags[0], buttonRed)
+            block1.putMove(blockFlags[1], buttonRed)
+            block2.putMove(blockFlags[2], buttonRed)
+            block3.putMove(blockFlags[3], buttonRed)
+            block4.putMove(blockFlags[4], buttonRed)
+            block5.putMove(blockFlags[5], buttonRed)
+            block6.putMove(blockFlags[6], buttonRed)
+            block7.putMove(blockFlags[7], buttonRed)
+            block8.putMove(blockFlags[8], buttonRed)
+
             pygame.display.update()
+
         else:
             if not isLeftMouseClicked():
                 onStartScreen = False
@@ -235,6 +238,7 @@ def handleEvents():
 
 
 def checkWin():
+    global acceptClicks
     winPositions = [[0, 1, 2],
                     [3, 4, 5],
                     [6, 7, 8],
@@ -247,7 +251,7 @@ def checkWin():
     for i in range(winPositions.__len__()):
         pos = [blockFlags[winPositions[i][0]], blockFlags[winPositions[i][1]], blockFlags[winPositions[i][2]]]
         if pos[0] != "" and pos[1] != "" and pos[2] != "" and pos[0] == pos[1] and pos[1] == pos[2]:
-            playerFlag()
+            acceptClicks = False
             return True
 
     return False
