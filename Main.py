@@ -7,6 +7,7 @@ os.environ['SDL_VIDEO_CENTERED'] = '1'  # this centers the window to the center 
 
 # Color definitions
 white = (255, 255, 255)
+lightGrey = (217, 217, 217)
 black = (0, 0, 0)
 buttonRed = (249, 52, 52)
 hoverButtonRed = (249, 97, 97)
@@ -120,6 +121,7 @@ def twoPlayerMode():
                 for i in range(len(blockArray)):
                     if blockArray[i].wasClicked(getCursorPos(), isLeftMouseClicked()) and blockFlags[i] == "":
                         blockFlags[i] = getMove(True)
+                        
             if moveFlag:
                 moveFlag = False
                 playerFlag()
@@ -202,10 +204,12 @@ def checkWin():
                     [0, 4, 8],
                     [2, 4, 6]]
 
-    for i in range(winPositions.__len__()):
+    for i in range(len(winPositions)):
         pos = [blockFlags[winPositions[i][0]], blockFlags[winPositions[i][1]], blockFlags[winPositions[i][2]]]
         if pos[0] != "" and pos[1] != "" and pos[2] != "" and pos[0] == pos[1] and pos[1] == pos[2]:
             acceptClicks = False
+            for j in range(len(pos)):
+                blockArray[winPositions[i][j]].showWinningColour(lightGrey)
             return True
 
     return False

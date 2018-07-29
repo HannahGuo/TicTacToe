@@ -5,8 +5,8 @@ class block(object):
         self.top = top
         self.width = width
         self.height = height
-        self.colour = colour
         self.font = font
+        self.colour = colour
         self.centered = width / 2
 
     def showBlock(self):
@@ -20,3 +20,6 @@ class block(object):
     def wasClicked(self, hover, click):
         return (self.left < hover[0] < self.left + self.width) and (self.top < hover[1] < self.top + self.height) and \
                click
+
+    def showWinningColour(self, newColour):
+        self.colour = newColour
