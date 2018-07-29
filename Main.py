@@ -48,24 +48,25 @@ quitButton = Button.button(buttonRed, hoverButtonRed, gameDisplay, "QUIT",
                            centerDisplayHeight + 70, buttonWidth, buttonHeight, white, 70, centerDisplayWidth,
                            centerDisplayHeight, buttonFont)
 
-block0 = Block.block(gameDisplay, centerDisplayWidth - halfBoxSize - 5 - boxSize, 100, boxSize, boxSize, white,
-                     blockFont)
-block1 = Block.block(gameDisplay, centerDisplayWidth - halfBoxSize + 5, 100, boxSize, boxSize, white, blockFont)
-block2 = Block.block(gameDisplay, centerDisplayWidth - halfBoxSize + 15 + boxSize, 100, boxSize, boxSize, white,
-                     blockFont)
-block3 = Block.block(gameDisplay, centerDisplayWidth - halfBoxSize - 5 - boxSize, 100 + boxSize + 10, boxSize,
-                     boxSize, white, blockFont)
-block4 = Block.block(gameDisplay, centerDisplayWidth - halfBoxSize + 5, 100 + boxSize + 10, boxSize, boxSize,
-                     white, blockFont)
-block5 = Block.block(gameDisplay, centerDisplayWidth - halfBoxSize + 15 + boxSize, 100 + boxSize + 10, boxSize,
-                     boxSize, white, blockFont)
-block6 = Block.block(gameDisplay, centerDisplayWidth - halfBoxSize - 5 - boxSize, 100 + (boxSize + 10) * 2, boxSize,
-                     boxSize, white, blockFont)
-block7 = Block.block(gameDisplay, centerDisplayWidth - halfBoxSize + 5, 100 + (boxSize + 10) * 2, boxSize, boxSize,
-                     white, blockFont)
-block8 = Block.block(gameDisplay, centerDisplayWidth - halfBoxSize + 15 + boxSize, 100 + (boxSize + 10) * 2,
-                     boxSize, boxSize, white, blockFont)
-
+blockArray = [Block.block(gameDisplay, centerDisplayWidth - halfBoxSize - 5 - boxSize, 100, boxSize, boxSize, white,
+                          blockFont),
+              Block.block(gameDisplay, centerDisplayWidth - halfBoxSize + 5, 100, boxSize, boxSize, white, blockFont),
+              Block.block(gameDisplay, centerDisplayWidth - halfBoxSize + 15 + boxSize, 100, boxSize, boxSize, white,
+                          blockFont),
+              Block.block(gameDisplay, centerDisplayWidth - halfBoxSize - 5 - boxSize, 100 + boxSize + 10, boxSize,
+                          boxSize, white, blockFont),
+              Block.block(gameDisplay, centerDisplayWidth - halfBoxSize + 5, 100 + boxSize + 10, boxSize, boxSize,
+                          white, blockFont),
+              Block.block(gameDisplay, centerDisplayWidth - halfBoxSize + 15 + boxSize, 100 + boxSize + 10, boxSize,
+                          boxSize, white, blockFont),
+              Block.block(gameDisplay, centerDisplayWidth - halfBoxSize - 5 - boxSize, 100 + (boxSize + 10) * 2,
+                          boxSize,
+                          boxSize, white, blockFont),
+              Block.block(gameDisplay, centerDisplayWidth - halfBoxSize + 5, 100 + (boxSize + 10) * 2, boxSize, boxSize,
+                          white, blockFont),
+              Block.block(gameDisplay, centerDisplayWidth - halfBoxSize + 15 + boxSize, 100 + (boxSize + 10) * 2,
+                          boxSize, boxSize, white, blockFont)
+              ]
 blockFlags = [""] * 9
 moves = ["X", "O"]
 moveFlag = False
@@ -116,55 +117,15 @@ def twoPlayerMode():
 
         if not onStartScreen:
             if acceptClicks:
-                if block0.wasClicked(getCursorPos(), isLeftMouseClicked()):
-                    if blockFlags[0] == "":
-                        blockFlags[0] = getMove(True)
-
-                if block1.wasClicked(getCursorPos(), isLeftMouseClicked()):
-                    if blockFlags[1] == "":
-                        blockFlags[1] = getMove(True)
-
-                if block2.wasClicked(getCursorPos(), isLeftMouseClicked()):
-                    if blockFlags[2] == "":
-                        blockFlags[2] = getMove(True)
-
-                if block3.wasClicked(getCursorPos(), isLeftMouseClicked()):
-                    if blockFlags[3] == "":
-                        blockFlags[3] = getMove(True)
-
-                if block4.wasClicked(getCursorPos(), isLeftMouseClicked()):
-                    if blockFlags[4] == "":
-                        blockFlags[4] = getMove(True)
-
-                if block5.wasClicked(getCursorPos(), isLeftMouseClicked()):
-                    if blockFlags[5] == "":
-                        blockFlags[5] = getMove(True)
-
-                if block6.wasClicked(getCursorPos(), isLeftMouseClicked()):
-                    if blockFlags[6] == "":
-                        blockFlags[6] = getMove(True)
-
-                if block7.wasClicked(getCursorPos(), isLeftMouseClicked()):
-                    if blockFlags[7] == "":
-                        blockFlags[7] = getMove(True)
-
-                if block8.wasClicked(getCursorPos(), isLeftMouseClicked()):
-                    if blockFlags[8] == "":
-                        blockFlags[8] = getMove(True)
-
+                for i in range(len(blockArray)):
+                    if blockArray[i].wasClicked(getCursorPos(), isLeftMouseClicked()) and blockFlags[i] == "":
+                        blockFlags[i] = getMove(True)
             if moveFlag:
                 moveFlag = False
                 playerFlag()
 
-            block0.putMove(blockFlags[0], buttonRed)
-            block1.putMove(blockFlags[1], buttonRed)
-            block2.putMove(blockFlags[2], buttonRed)
-            block3.putMove(blockFlags[3], buttonRed)
-            block4.putMove(blockFlags[4], buttonRed)
-            block5.putMove(blockFlags[5], buttonRed)
-            block6.putMove(blockFlags[6], buttonRed)
-            block7.putMove(blockFlags[7], buttonRed)
-            block8.putMove(blockFlags[8], buttonRed)
+            for i in range(len(blockArray)):
+                blockArray[i].putMove(blockFlags[i], buttonRed)
 
             pygame.display.update()
 
@@ -179,15 +140,8 @@ def crossStyle():
     gameDisplay.fill(black, [centerDisplayWidth - boxSize - halfBoxSize - 5, 100 + boxSize, 230, 10])
     gameDisplay.fill(black, [centerDisplayWidth - boxSize - halfBoxSize - 5, 100 + (boxSize * 2) + 10, 230, 10])
 
-    block0.showBlock()
-    block1.showBlock()
-    block2.showBlock()
-    block3.showBlock()
-    block4.showBlock()
-    block5.showBlock()
-    block6.showBlock()
-    block7.showBlock()
-    block8.showBlock()
+    for i in range(len(blockArray)):
+        blockArray[i].showBlock()
 
 
 def configureBackground():
