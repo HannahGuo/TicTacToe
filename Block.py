@@ -22,4 +22,5 @@ class block(object):
                click
 
     def showWinningColour(self, newColour):
-        self.colour = newColour
+        self.display.fill(newColour, [self.left, self.top, self.width, self.height])
+

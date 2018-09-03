@@ -49,6 +49,11 @@ quitButton = Button.button(buttonRed, hoverButtonRed, gameDisplay, "QUIT",
                            centerDisplayHeight + 70, buttonWidth, buttonHeight, white, 70, centerDisplayWidth,
                            centerDisplayHeight, buttonFont)
 
+resetButton = Button.button(buttonRed, hoverButtonRed, gameDisplay, "RESTART",
+                            centerDisplayWidth - (buttonWidth / 2),
+                            centerDisplayHeight + 110, buttonWidth, buttonHeight, white, 110, centerDisplayWidth,
+                            centerDisplayHeight, buttonFont)
+
 blockArray = [Block.block(gameDisplay, centerDisplayWidth - halfBoxSize - 5 - boxSize, 100, boxSize, boxSize, white,
                           blockFont),
               Block.block(gameDisplay, centerDisplayWidth - halfBoxSize + 5, 100, boxSize, boxSize, white, blockFont),
@@ -121,7 +126,7 @@ def twoPlayerMode():
                 for i in range(len(blockArray)):
                     if blockArray[i].wasClicked(getCursorPos(), isLeftMouseClicked()) and blockFlags[i] == "":
                         blockFlags[i] = getMove(True)
-                        
+
             if moveFlag:
                 moveFlag = False
                 playerFlag()
@@ -159,10 +164,13 @@ def put_message_center(message, color, font, yOffset):
 
 
 def displayCurrentPlayer(win):
-    if not win:
+    # 0 == Ongoing Game, 1 == Player Won, 2 == Draw/Game Over
+    if win == 0:
         put_message_center("Current Player: " + getMove(False), black, titleFont, 200)
-    else:
+    elif win == 1:
         put_message_center("Player " + moves[0 if currentPlayer == 1 else 1] + " wins!", black, titleFont, 200)
+    elif win == 2:
+        put_message_center("It's a Draw!", black, titleFont, 200)
 
 
 def getMove(flag):
@@ -210,9 +218,32 @@ def checkWin():
             acceptClicks = False
             for j in range(len(pos)):
                 blockArray[winPositions[i][j]].showWinningColour(lightGrey)
-            return True
+            reset()
+            return 1
+        elif checkGameEnd():
+            reset()
+            return 2
+    return 0
 
-    return False
+
+def checkGameEnd():
+    for i in range(len(blockFlags)):
+        if blockFlags[i] == "":
+            return False
+    return True
+
+
+def reset():
+    global currentPlayer
+    global acceptClicks
+    resetButton.showButton()
+
+    if resetButton.isHovered(getCursorPos()) and isLeftMouseClicked():
+        for i in range(len(blockFlags)):
+            blockFlags[i] = ""
+        currentPlayer = 0
+        acceptClicks = True
+        return
 
 
 def quitProgram():
