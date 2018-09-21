@@ -18,6 +18,7 @@ hoverButtonBlue = (138, 180, 247)
 # Importing font
 titleFont = pygame.font.SysFont("cambria", 30)
 buttonFont = pygame.font.SysFont("cambria", 20)
+modeFont = pygame.font.SysFont("cambria", 16)
 blockFont = pygame.font.Font("ARLRDBD.ttf", 50)
 
 displayWidth = 505
@@ -79,6 +80,7 @@ moveFlag = False
 currentPlayer = 0
 onStartScreen = True
 acceptClicks = True
+onGoingMode = "SinglePlayer"
 
 
 def startScreen():
@@ -103,17 +105,13 @@ def startScreen():
 
 
 def singlePlayerMode():
-    while True:
-        handleEvents()
-        configureBackground()
-        crossStyle()
-        pygame.display.update()
-
-
-def twoPlayerMode():
     global blockFlags
-    global moveFlag
+    global currentPlayer
     global onStartScreen
+    global moveFlag
+    global onGoingMode
+
+    onGoingMode = "Single Player Mode"
 
     while True:
         handleEvents()
@@ -121,18 +119,64 @@ def twoPlayerMode():
         crossStyle()
         displayCurrentPlayer(checkWin())
 
+        put_message_center(onGoingMode, buttonRed, modeFont, 225)
+
+        if not onStartScreen:
+            if currentPlayer == 0:
+                for i in range(len(blockArray)):
+                    if blockArray[i].wasClicked(getCursorPos(), isLeftMouseClicked()) and blockFlags[i] == "":
+                        blockFlags[i] = moves[0]
+                        currentPlayer = 1
+            else:
+                # currentPlayer = moves[1]
+                # blockFlags[computerMove()] = moves[1]
+                pass
+
+            for i in range(len(blockArray)):
+                blockArray[i].putMove(blockFlags[i], buttonRed)
+        else:
+            if not isLeftMouseClicked():
+                onStartScreen = False
+
+        pygame.display.update()
+
+
+def computerMove():
+    global blockFlags
+
+    blockFlags[0] = "O"
+
+    return 0
+
+
+def twoPlayerMode():
+    global blockFlags
+    global moveFlag
+    global onStartScreen
+    global onGoingMode
+
+    onGoingMode = "Two Player Mode"
+
+    while True:
+        handleEvents()
+        configureBackground()
+        crossStyle()
+        displayCurrentPlayer(checkWin())
+
+        put_message_center(onGoingMode, buttonRed, modeFont, 225)
+
         if not onStartScreen:
             if acceptClicks:
                 for i in range(len(blockArray)):
                     if blockArray[i].wasClicked(getCursorPos(), isLeftMouseClicked()) and blockFlags[i] == "":
                         blockFlags[i] = getMove(True)
 
+            for i in range(len(blockArray)):
+                blockArray[i].putMove(blockFlags[i], buttonRed)
+
             if moveFlag:
                 moveFlag = False
                 playerFlag()
-
-            for i in range(len(blockArray)):
-                blockArray[i].putMove(blockFlags[i], buttonRed)
 
             pygame.display.update()
 
@@ -168,9 +212,14 @@ def displayCurrentPlayer(win):
     if win == 0:
         put_message_center("Current Player: " + getMove(False), black, titleFont, 200)
     elif win == 1:
-        put_message_center("Player " + moves[0 if currentPlayer == 1 else 1] + " wins!", black, titleFont, 200)
+        if onGoingMode.__eq__("Two Player Mode"):
+            put_message_center("Player " + moves[0 if currentPlayer == 1 else 1] + " wins!", black, titleFont, 200)
+        else:
+            put_message_center("Player " + moves[1 if currentPlayer == 1 else 0] + " wins!", black, titleFont, 200)
     elif win == 2:
         put_message_center("It's a Draw!", black, titleFont, 200)
+    else:
+        print("Code Error, this shouldn't run...")
 
 
 def getMove(flag):
